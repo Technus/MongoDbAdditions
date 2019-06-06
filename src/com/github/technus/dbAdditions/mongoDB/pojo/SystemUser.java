@@ -1,6 +1,5 @@
 package com.github.technus.dbAdditions.mongoDB.pojo;
 
-import com.sun.security.auth.module.NTSystem;
 import org.bson.codecs.pojo.annotations.BsonCreator;
 import org.bson.codecs.pojo.annotations.BsonProperty;
 
@@ -38,12 +37,16 @@ public class SystemUser {
         return systemName;
     }
 
-    private static final NTSystem ntSystem=new NTSystem();
     private static String getCurrentDomainName(){
-        return ntSystem.getDomain();
+        try {
+            return InetAddress.getLocalHost().getCanonicalHostName();
+        } catch (UnknownHostException e) {
+            e.printStackTrace();
+        }
+        return null;
     }
     private static String getCurrentUserName(){
-        return ntSystem.getName();
+        return System.getProperty("user.name");
     }
     private static String getCurrentSystemName() {
         try {
